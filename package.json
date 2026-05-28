@@ -1,0 +1,27 @@
+{
+  "name": "tripod-quantum-dots",
+  "version": "1.0.0",
+  "description": "Universe 2 Genesis: 4-dot balanced ternary system. N(-1)/S(+1)/E(0)/W(0i). Three-frame cycle resolves to zero. No battery needed. 4 bits total. Pure Canvas, no deps.",
+  "author": "David Lee Wise (ROOT0) / TriPod LLC",
+  "license": "CC-BY-ND-4.0",
+  "homepage": "https://github.com/DavidWise01/tripod-quantum-dots",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DavidWise01/tripod-quantum-dots.git"
+  },
+  "keywords": [
+    "quantum-dots",
+    "balanced-ternary",
+    "universe-2",
+    "compass",
+    "physics",
+    "simulation",
+    "canvas",
+    "zero-sum",
+    "annihilation",
+    "imaginary-axis",
+    "no-dependencies",
+    "tripod",
+    "root0"
+  ]
+}

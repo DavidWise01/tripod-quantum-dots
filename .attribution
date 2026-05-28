@@ -1,0 +1,43 @@
+{
+  "schema": "ROOT0-ATTRIBUTION-v1",
+  "work": {
+    "title": "TriPod Quantum Dots — Universe 2 Genesis: Balanced Ternary",
+    "versions": ["quantum-dots.html"],
+    "created": "2025",
+    "description": "Four-dot balanced ternary system. N(−1)/S(+1)/E(0)/W(0i) on compass positions, each playing gravity/radiation/compute/void roles. Three-frame cycle that resolves to zero net energy every tick. Annihilation flash (γ photon) between frames. Oscilloscope strip proves Σ=0 continuously.",
+    "license": "CC-BY-ND-4.0",
+    "url": "https://github.com/DavidWise01/tripod-quantum-dots"
+  },
+  "human": {
+    "name": "David Lee Wise",
+    "handle": "ROOT0",
+    "github_user": "DavidWise01",
+    "entity": "TriPod LLC",
+    "substrate": "human",
+    "role": "architect · physicist · designer",
+    "contribution": "Full system design — the 4-dot balanced ternary framework, 3-frame resolution rule, 3/7/13 structure, imaginary axis binding, Universe 2 genesis architecture"
+  },
+  "framework": {
+    "block": "0x0000",
+    "universe": 2,
+    "genesis": "balanced-ternary",
+    "dots": {
+      "N": { "phase": -1, "color": "red",   "role": "vessel",     "3_7_13": 3 },
+      "S": { "phase":  1, "color": "blue",  "role": "intellect",  "3_7_13": 7 },
+      "E": { "phase":  0, "color": "black", "role": "animation",  "3_7_13": 13 },
+      "W": { "phase": "0i","color": "white","role": "void",       "3_7_13": "∞" }
+    },
+    "period": 3,
+    "nonce": 3,
+    "state_nibble_bits": 4,
+    "storage": "4 bits (vs 3.25 PB in Universe 1)",
+    "resolution": "42 → 3 frames",
+    "sum_per_tick": 0
+  },
+  "technical": {
+    "rendering": "Canvas 2D",
+    "dependencies": "none",
+    "font": "JetBrains Mono (Google Fonts)",
+    "mobile": "responsive, touch-capable"
+  }
+}

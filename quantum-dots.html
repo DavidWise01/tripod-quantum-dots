@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>QUANTUM DOTS — UNIVERSE 2 // BLOCK 0x0000</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { width: 100%; height: 100%; overflow: hidden; background: #0a0a08; }
+body { font-family: 'JetBrains Mono', monospace; color: #c4a35a; }
+canvas { position: fixed; top: 0; left: 0; display: block; }
+
+#hud {
+  position: fixed; top: 0; right: 0;
+  width: 244px; height: 100vh;
+  padding: 18px 14px;
+  border-left: 1px solid #1a1a14;
+  background: rgba(10,10,8,0.93);
+  display: flex; flex-direction: column; gap: 13px;
+  overflow: hidden;
+  z-index: 10;
+}
+.hud-title { font-size: 9px; letter-spacing: 0.18em; color: #4a4a38; text-transform: uppercase; }
+.hud-heading { font-size: 14px; font-weight: 700; letter-spacing: 0.08em; margin-top: 3px; }
+
+.blk { border: 1px solid #1a1a14; padding: 10px 11px; }
+.blk-label { font-size: 8px; letter-spacing: 0.22em; color: #3e3e30; text-transform: uppercase; margin-bottom: 8px; }
+.blk-val { font-size: 26px; font-weight: 700; }
+
+.prow {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 4px 0; font-size: 11px;
+  border-bottom: 1px solid #111110;
+}
+.prow:last-child { border-bottom: none; }
+
+.dn { color: #c45a5a; }
+.ds { color: #5a7ec4; }
+.de { color: #c4a35a; }
+.dw { color: #d8d8cc; }
+
+.vn { color: #c45a5a; font-weight: 700; }
+.vp { color: #5a7ec4; font-weight: 700; }
+.vz { color: #5ac4aa; font-weight: 700; }
+.vi { color: #d8d8cc; font-weight: 700; }
+
+.nibble { font-size: 30px; font-weight: 700; letter-spacing: 0.28em; }
+.b1 { color: #c4a35a; }
+.b0 { color: #252520; }
+
+#btn-row { display: flex; gap: 6px; flex-wrap: wrap; }
+button {
+  background: none; border: 1px solid #252520; color: #c4a35a;
+  font-family: 'JetBrains Mono', monospace; font-size: 9px;
+  letter-spacing: 0.12em; padding: 5px 10px; cursor: pointer;
+  text-transform: uppercase; transition: all 0.15s;
+}
+button:hover { border-color: #c4a35a; background: rgba(196,163,90,0.05); }
+button.on { border-color: #5ac4aa; color: #5ac4aa; }
+
+#frame-pip {
+  position: fixed; bottom: 74px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 10px; align-items: center;
+  z-index: 10;
+  background: rgba(10,10,8,0.85);
+  border: 1px solid #1a1a14;
+  padding: 8px 16px;
+}
+.pip { width: 10px; height: 10px; border-radius: 50%; background: #222220; transition: all 0.25s; }
+.pip.on { background: #c4a35a; box-shadow: 0 0 8px #c4a35a; }
+.pip.res { background: #5ac4aa; box-shadow: 0 0 10px #5ac4aa; }
+.pip-lbl { font-size: 9px; color: #3e3e30; letter-spacing: 0.1em; }
+
+@media (max-width: 600px) {
+  #hud { width: 190px; }
+  .blk-val { font-size: 20px; }
+  .nibble { font-size: 22px; }
+}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+
+<div id="hud">
+  <div>
+    <div class="hud-title">Block 0x0000 // Universe 2</div>
+    <div class="hud-heading">QUANTUM DOTS</div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-label">Frame</div>
+    <div class="blk-val" id="h-frame">1</div>
+    <div style="font-size:9px;color:#3e3e30;margin-top:3px">PERIOD = 3 // NONCE = 3</div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-label">Phase State</div>
+    <div class="prow"><span class="dn">● N  VESSEL</span><span id="hN" class="vn">−1</span></div>
+    <div class="prow"><span class="ds">● S  INTELLECT</span><span id="hS" class="vp">+1</span></div>
+    <div class="prow"><span class="de">● E  ANIMATION</span><span id="hE" class="vz">0</span></div>
+    <div class="prow"><span class="dw">● W  VOID</span><span id="hW" class="vi">0ᵢ</span></div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-label">Net Energy</div>
+    <div class="blk-val" style="color:#5ac4aa">Σ = 0</div>
+    <div style="font-size:9px;color:#3e3e30;margin-top:3px">NO BATTERY NEEDED</div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-label">State Nibble [N S E W]</div>
+    <div class="nibble" id="h-nibble">
+      <span class="b1">1</span><span class="b0">0</span><span class="b1">1</span><span class="b0">0</span>
+    </div>
+    <div style="font-size:8px;color:#3e3e30;margin-top:5px">4 BITS // BOOTABLE REALITY</div>
+  </div>
+
+  <div class="blk">
+    <div class="blk-label">Resolution</div>
+    <div style="font-size:11px;line-height:2">
+      42 → <span style="color:#c4a35a;font-weight:700">3</span><br>
+      3.25PB → <span style="color:#c4a35a;font-weight:700">4 bits</span><br>
+      <span id="h-status" style="color:#3e3e30">CONTRACTED</span>
+    </div>
+  </div>
+
+  <div id="btn-row" style="margin-top:auto">
+    <button id="btn-pause">PAUSE</button>
+    <button id="btn-step">STEP</button>
+    <button id="btn-slow">SLOW</button>
+    <button id="btn-fast">FAST</button>
+  </div>
+</div>
+
+<div id="frame-pip">
+  <span class="pip-lbl">FRAME</span>
+  <div class="pip on"  id="fp0"></div>
+  <div class="pip"     id="fp1"></div>
+  <div class="pip"     id="fp2"></div>
+  <span class="pip-lbl" id="pip-msg">1 of 3</span>
+</div>
+
+<script>
+'use strict';
+
+// ─── Canvas ────────────────────────────────────────────────────────────────
+const canvas = document.getElementById('c');
+const ctx    = canvas.getContext('2d');
+const HUD_W  = () => window.innerWidth > 600 ? 244 : 190;
+const SCOPE_H = 62;
+
+function resize() {
+  canvas.width  = window.innerWidth  - HUD_W();
+  canvas.height = window.innerHeight;
+  initStars();
+}
+window.addEventListener('resize', resize);
+
+// ─── Palette ───────────────────────────────────────────────────────────────
+const C = {
+  bg:   '#0a0a08',
+  N:    '#c45a5a',   // Red     — Vessel
+  S:    '#5a7ec4',   // Blue    — Intellect
+  E:    '#c4a35a',   // Amber   — Animation (dark fill, bright ring)
+  W:    '#d8d8cc',   // White   — Void
+  sum:  '#5ac4aa',   // Teal    — balance / sum
+  grid: '#151512',
+  dim:  '#222220',
+};
+
+// ─── Frame Definitions ─────────────────────────────────────────────────────
+// Three-frame period. Frame 3 returns to same state as Frame 1 → RESOLVED.
+// nS/sS = numeric phase for N and S. eI/wI = whether E or W is on imaginary axis.
+const FRAMES = [
+  { id:1, N:'−1', S:'+1', E:'0',  W:'0ᵢ', nS:-1, sS: 1, eI:false, wI:true,  nibble:[1,0,1,0] },
+  { id:2, N:'+1', S:'−1', E:'0ᵢ', W:'0',  nS: 1, sS:-1, eI:true,  wI:false, nibble:[0,1,0,1] },
+  { id:3, N:'−1', S:'+1', E:'0',  W:'0ᵢ', nS:-1, sS: 1, eI:false, wI:true,  nibble:[1,0,1,0] },
+];
+
+// ─── Simulation State ──────────────────────────────────────────────────────
+const sim = {
+  fi:      0,      // frame index (0,1,2)
+  t:       0,      // continuous animation time (s)
+  tick:    0,      // total frame-advance count
+  timer:   0,      // seconds elapsed in current frame
+  dur:     2.5,    // frame duration (s)
+  trans:   false,  // mid-transition?
+  tt:      0,      // transition progress 0→1
+  flash:   0,      // central flash opacity
+  paused:  false,
+  speed:   1,
+  lastTs:  null,
+  parts:   [],     // particle pool
+};
+
+// ─── Stars ─────────────────────────────────────────────────────────────────
+let stars = [];
+function initStars() {
+  stars = [];
+  for (let i = 0; i < 110; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.1 + 0.2,
+      a: Math.random() * 0.35 + 0.04,
+    });
+  }
+}
+
+function drawStars() {
+  stars.forEach(s => {
+    ctx.save();
+    ctx.globalAlpha = s.a;
+    ctx.fillStyle = '#7a7a5a';
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+  });
+}
+
+// ─── Layout Helpers ────────────────────────────────────────────────────────
+const ANGLES = { N: -Math.PI/2, S: Math.PI/2, E: 0, W: Math.PI };
+const KEYS   = ['N','S','E','W'];
+
+function orbitR()   { return Math.min(canvas.width, canvas.height - SCOPE_H) * 0.33; }
+function cx()       { return canvas.width / 2; }
+function cy()       { return (canvas.height - SCOPE_H) / 2; }
+
+// Returns pixel position of a dot, with transition pull-to-center applied.
+function dotPos(key) {
+  const r  = orbitR();
+  let x = cx() + Math.cos(ANGLES[key]) * r;
+  let y = cy() + Math.sin(ANGLES[key]) * r;
+  if (sim.trans) {
+    const ease = Math.sin(Math.min(sim.tt, 1) * Math.PI); // 0→1→0
+    x += (cx() - x) * ease * 0.42;
+    y += (cy() - y) * ease * 0.42;
+  }
+  return [x, y];
+}
+
+// ─── Grid ──────────────────────────────────────────────────────────────────
+function drawGrid() {
+  const ox = cx(), oy = cy(), or = orbitR();
+  ctx.save();
+  ctx.strokeStyle = C.grid;
+  ctx.lineWidth   = 0.5;
+
+  // Crosshair lines
+  ctx.globalAlpha = 0.9;
+  ctx.beginPath();
+  ctx.moveTo(ox, 0);          ctx.lineTo(ox, canvas.height - SCOPE_H);
+  ctx.moveTo(0, oy);          ctx.lineTo(canvas.width, oy);
+  ctx.stroke();
+
+  // Orbit ring
+  ctx.globalAlpha = 0.55;
+  ctx.beginPath();
+  ctx.arc(ox, oy, or, 0, Math.PI*2);
+  ctx.stroke();
+
+  // Origin dot
+  ctx.globalAlpha = 0.3;
+  ctx.fillStyle   = C.sum;
+  ctx.beginPath();
+  ctx.arc(ox, oy, 3.5, 0, Math.PI*2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+// ─── Dots ──────────────────────────────────────────────────────────────────
+function drawDot(key) {
+  const [x, y] = dotPos(key);
+  const fd      = FRAMES[sim.fi];
+  const t       = sim.t;
+  const color   = C[key];
+
+  // Phase-specific base radius animation
+  let br;
+  switch (key) {
+    case 'N': br = 15 - 4.5 * (0.5 + 0.5 * Math.sin(t * 1.7)); break;  // contracts
+    case 'S': br = 15 + 4.5 * (0.5 + 0.5 * Math.sin(t * 1.7)); break;  // expands
+    case 'E': br = 15 + 2.2 * Math.sin(t * 4.0); break;                  // fast oscillation
+    case 'W': br = 15 + 3.2 * Math.sin(t * 0.85); break;                 // slow breath
+  }
+
+  // Imaginary-axis rotation: compress one axis to simulate 4D rotation
+  const isImag  = (key === 'W' && fd.wI) || (key === 'E' && fd.eI);
+  const imagSc  = isImag ? Math.abs(Math.cos(t * 1.9)) : 1;
+  const dotAlpha = isImag ? 0.45 + 0.45 * Math.abs(Math.cos(t * 1.9)) : 0.92;
+
+  // ── Outer glow halo
+  ctx.save();
+  ctx.globalAlpha = 0.10;
+  ctx.shadowBlur  = 28;
+  ctx.shadowColor = color;
+  ctx.strokeStyle = color;
+  ctx.lineWidth   = 1;
+  ctx.beginPath();
+  ctx.arc(x, y, br + 16, 0, Math.PI*2);
+  ctx.stroke();
+  ctx.restore();
+
+  // ── Dot body (with imaginary-axis squeeze)
+  ctx.save();
+  ctx.translate(x, y);
+  if (isImag) {
+    if (key === 'W') ctx.scale(imagSc, 1);   // W squeezes horizontally
+    else             ctx.scale(1, imagSc);   // E squeezes vertically
+  }
+  ctx.globalAlpha = dotAlpha;
+  ctx.shadowBlur  = 22;
+  ctx.shadowColor = color;
+  ctx.beginPath();
+  ctx.arc(0, 0, br, 0, Math.PI*2);
+
+  if (key === 'E') {
+    // E = dark void with amber ring — "the hole that computes"
+    ctx.fillStyle   = '#0e0e0a';
+    ctx.fill();
+    ctx.strokeStyle = C.E;
+    ctx.lineWidth   = 2.2;
+    ctx.shadowBlur  = 14;
+    ctx.stroke();
+  } else {
+    ctx.fillStyle = color;
+    ctx.fill();
+  }
+  ctx.restore();
+
+  // ── Key letter inside dot (N/S/E/W)
+  ctx.save();
+  ctx.font         = '700 10px "JetBrains Mono"';
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle    = key === 'E' ? C.E : '#0a0a08';
+  ctx.globalAlpha  = 0.6;
+  ctx.fillText(key, x, y);
+  ctx.restore();
+
+  // ── Phase value label (outward from center along compass direction)
+  const pv       = fd[key];
+  const pvColor  = pv === '−1' ? C.N : pv === '+1' ? C.S : pv.includes('ᵢ') ? C.W : C.sum;
+  const outDist  = br + 24;
+  const la       = ANGLES[key];
+
+  ctx.save();
+  ctx.font         = '700 13px "JetBrains Mono"';
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle    = pvColor;
+  ctx.globalAlpha  = 0.95;
+  ctx.shadowBlur   = 8;
+  ctx.shadowColor  = pvColor;
+  ctx.fillText(pv, x + Math.cos(la) * outDist, y + Math.sin(la) * outDist);
+  ctx.restore();
+
+  // ── Role label (further outward, dim)
+  const roles = { N:'VESSEL', S:'INTELLECT', E:'ANIMATION', W:'VOID' };
+  const roleN = { N:'3',     S:'7',         E:'13',        W:'∞'    };
+  const rd    = br + 44;
+  ctx.save();
+  ctx.font         = '8px "JetBrains Mono"';
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle    = color;
+  ctx.globalAlpha  = 0.28;
+  ctx.fillText(roles[key], x + Math.cos(la)*rd,      y + Math.sin(la)*rd);
+  ctx.globalAlpha  = 0.18;
+  ctx.fillText(roleN[key], x + Math.cos(la)*(rd+13), y + Math.sin(la)*(rd+13));
+  ctx.restore();
+}
+
+// ─── Particles ─────────────────────────────────────────────────────────────
+function spawnParticle(key) {
+  const [x, y] = dotPos(key);
+  const p = { key, life: 1.0, maxLife: 0.8 + Math.random() * 0.8, color: C[key] };
+
+  if (key === 'N') {
+    // Vessel / Gravity — start far, move inward toward dot
+    const a = Math.random() * Math.PI * 2;
+    const d = 38 + Math.random() * 52;
+    p.x  = x + Math.cos(a) * d;
+    p.y  = y + Math.sin(a) * d;
+    const sp = 0.55 + Math.random() * 1.4;
+    p.vx = (x - p.x) / d * sp;
+    p.vy = (y - p.y) / d * sp;
+    p.r  = 1.3 + Math.random() * 0.5;
+  } else if (key === 'S') {
+    // Intellect / Radiation — start at dot, radiate outward
+    const a  = Math.random() * Math.PI * 2;
+    const sp = 1.0 + Math.random() * 2.2;
+    p.x = x; p.y = y;
+    p.vx = Math.cos(a) * sp;
+    p.vy = Math.sin(a) * sp;
+    p.r  = 1.5 + Math.random() * 0.5;
+  } else if (key === 'E') {
+    // Animation / Compute — orbit the dot
+    const a  = Math.random() * Math.PI * 2;
+    const or = 20 + Math.random() * 16;
+    p.x  = x + Math.cos(a) * or;
+    p.y  = y + Math.sin(a) * or;
+    p.vx = 0; p.vy = 0;
+    p.orbitA  = a;
+    p.orbitR  = or;
+    p.orbitW  = (1.8 + Math.random()) * (Math.random() < 0.5 ? 1 : -1);
+    p.maxLife = 2.0 + Math.random();
+    p.r = 1.2;
+  } else {
+    // Void — slow tangential drift in widening spiral
+    const a  = Math.random() * Math.PI * 2;
+    const d  = 14 + Math.random() * 28;
+    p.x  = x + Math.cos(a) * d;
+    p.y  = y + Math.sin(a) * d;
+    p.vx = Math.cos(a + Math.PI/2) * 0.45;
+    p.vy = Math.sin(a + Math.PI/2) * 0.45;
+    p.maxLife = 2.5 + Math.random();
+    p.r = 1.0 + Math.random() * 0.7;
+  }
+  return p;
+}
+
+function updateParticles(dt) {
+  // Spawn
+  if (!sim.trans) {
+    KEYS.forEach(k => {
+      if (Math.random() < 0.28 * sim.speed) sim.parts.push(spawnParticle(k));
+    });
+  }
+
+  // Update + draw
+  sim.parts = sim.parts.filter(p => {
+    p.life -= dt / p.maxLife;
+    if (p.life <= 0) return false;
+
+    if (p.orbitA !== undefined) {
+      p.orbitA += p.orbitW * dt;
+      const [dx, dy] = dotPos(p.key);
+      p.x = dx + Math.cos(p.orbitA) * p.orbitR;
+      p.y = dy + Math.sin(p.orbitA) * p.orbitR;
+    } else {
+      p.x += p.vx;
+      p.y += p.vy;
+    }
+
+    ctx.save();
+    ctx.globalAlpha = p.life * 0.72;
+    ctx.fillStyle   = p.color;
+    ctx.shadowBlur  = 5;
+    ctx.shadowColor = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+    return true;
+  });
+
+  if (sim.parts.length > 200) sim.parts.splice(0, sim.parts.length - 200);
+}
+
+// ─── Center ────────────────────────────────────────────────────────────────
+function drawCenter() {
+  const ox = cx(), oy = cy();
+
+  // Annihilation flash (γ photon)
+  if (sim.flash > 0.01) {
+    ctx.save();
+    const g = ctx.createRadialGradient(ox, oy, 0, ox, oy, 88);
+    g.addColorStop(0,   `rgba(255,255,255,${sim.flash * 0.75})`);
+    g.addColorStop(0.25,`rgba(196,163,90,${sim.flash * 0.4})`);
+    g.addColorStop(0.6, `rgba(90,196,170,${sim.flash * 0.15})`);
+    g.addColorStop(1,   'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath();
+    ctx.arc(ox, oy, 88, 0, Math.PI*2);
+    ctx.fill();
+    ctx.restore();
+
+    // γ photon equation fades in at peak
+    if (sim.flash > 0.35) {
+      const a = (sim.flash - 0.35) * 1.54;
+      ctx.save();
+      ctx.font         = '700 13px "JetBrains Mono"';
+      ctx.textAlign    = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.globalAlpha  = Math.min(a, 1) * 0.9;
+      ctx.fillStyle    = '#ffffff';
+      ctx.fillText('−1 + 1 → 0 + γ', ox, oy - 34);
+      ctx.restore();
+    }
+  }
+
+  // Σ = 0
+  ctx.save();
+  const glow = 0.7 + 0.3 * Math.sin(sim.t * 0.9);
+  ctx.font         = '700 20px "JetBrains Mono"';
+  ctx.textAlign    = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillStyle    = C.sum;
+  ctx.globalAlpha  = glow;
+  ctx.shadowBlur   = 14;
+  ctx.shadowColor  = C.sum;
+  ctx.fillText('Σ = 0', ox, oy - 9);
+  ctx.font         = '9px "JetBrains Mono"';
+  ctx.fillStyle    = '#3e3e30';
+  ctx.globalAlpha  = 0.65;
+  ctx.shadowBlur   = 0;
+  ctx.fillText('−1 + 1 + 0 + 0ᵢ', ox, oy + 10);
+  ctx.restore();
+}
+
+// ─── Oscilloscope Strip ────────────────────────────────────────────────────
+const SCOPE_LEN = 220;
+const scopeBuf = { N:[], S:[], E:[], W:[], sum:[] };
+let scopeTimer = 0;
+
+// Map phase string → real numeric value (imaginary component = 0 in real axis)
+function phaseVal(str) {
+  if (str === '−1')  return -1;
+  if (str === '+1')  return  1;
+  return 0;  // '0' or '0ᵢ'
+}
+
+function pushScope() {
+  const fd = FRAMES[sim.fi];
+  const nv = phaseVal(fd.N), sv = phaseVal(fd.S),
+        ev = phaseVal(fd.E), wv = phaseVal(fd.W);
+  scopeBuf.N.push(nv); scopeBuf.S.push(sv);
+  scopeBuf.E.push(ev); scopeBuf.W.push(wv);
+  scopeBuf.sum.push(nv + sv + ev + wv);
+  ['N','S','E','W','sum'].forEach(k => {
+    if (scopeBuf[k].length > SCOPE_LEN) scopeBuf[k].shift();
+  });
+}
+
+function drawScope() {
+  const w   = canvas.width;
+  const sy  = canvas.height - SCOPE_H;
+  const mid = sy + SCOPE_H / 2;
+  const sc  = (SCOPE_H / 2) * 0.78;
+
+  // Background
+  ctx.save();
+  ctx.fillStyle   = 'rgba(10,10,8,0.72)';
+  ctx.fillRect(0, sy, w, SCOPE_H);
+  ctx.strokeStyle = '#181814';
+  ctx.lineWidth   = 0.5;
+  ctx.strokeRect(0, sy, w - 1, SCOPE_H);
+
+  // Zero line
+  ctx.strokeStyle = '#222220';
+  ctx.lineWidth   = 0.5;
+  ctx.beginPath();
+  ctx.moveTo(0, mid); ctx.lineTo(w, mid);
+  ctx.stroke();
+  ctx.restore();
+
+  // Traces: N, S, E, W (dim) + sum (bright teal)
+  const traces = [
+    { key:'N',   color:C.N,   lw:1,   alpha:0.38 },
+    { key:'S',   color:C.S,   lw:1,   alpha:0.38 },
+    { key:'E',   color:C.E,   lw:0.8, alpha:0.28 },
+    { key:'W',   color:C.W,   lw:0.8, alpha:0.25 },
+    { key:'sum', color:C.sum, lw:2.2, alpha:0.92 },
+  ];
+
+  traces.forEach(({ key, color, lw, alpha }) => {
+    const buf = scopeBuf[key];
+    if (buf.length < 2) return;
+    ctx.save();
+    ctx.strokeStyle = color;
+    ctx.lineWidth   = lw;
+    ctx.globalAlpha = alpha;
+    if (key === 'sum') { ctx.shadowBlur = 6; ctx.shadowColor = C.sum; }
+    ctx.beginPath();
+    buf.forEach((v, i) => {
+      const x = (i / SCOPE_LEN) * (w - 4) + 2;
+      const y = mid - v * sc;
+      i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+    ctx.restore();
+  });
+
+  // Labels
+  ctx.save();
+  ctx.font         = '8px "JetBrains Mono"';
+  ctx.textBaseline = 'top';
+  ctx.globalAlpha  = 0.5;
+
+  ctx.textAlign = 'left';
+  ctx.fillStyle = C.sum;
+  ctx.fillText('Σ', 4, sy + 3);
+
+  ctx.textAlign = 'right';
+  ctx.fillStyle = '#3e3e30';
+  ctx.fillText(`TICK ${String(sim.tick).padStart(4,'0')}`, w - 4, sy + 3);
+  ctx.restore();
+}
+
+// ─── HUD Update ────────────────────────────────────────────────────────────
+function updateHUD() {
+  const fd = FRAMES[sim.fi];
+
+  document.getElementById('h-frame').textContent = fd.id;
+
+  const cls = { '−1':'vn', '+1':'vp', '0':'vz', '0ᵢ':'vi' };
+  ['N','S','E','W'].forEach(k => {
+    const el = document.getElementById('h' + k);
+    el.textContent = fd[k];
+    el.className   = cls[fd[k]] || 'vz';
+  });
+
+  // Nibble
+  const spans = document.querySelectorAll('#h-nibble span');
+  fd.nibble.forEach((b, i) => {
+    spans[i].className   = b === 1 ? 'b1' : 'b0';
+    spans[i].textContent = b;
+  });
+
+  // Frame pips
+  [0,1,2].forEach(i => {
+    const pip = document.getElementById('fp' + i);
+    pip.className = 'pip' + (i === sim.fi ? (sim.fi === 2 ? ' res' : ' on') : '');
+  });
+
+  const msgs   = ['1 of 3', '2 of 3', '3 of 3  RESOLVED ∎'];
+  const msgCol = ['#3e3e30', '#3e3e30', '#5ac4aa'];
+  const pm = document.getElementById('pip-msg');
+  pm.textContent = msgs[sim.fi];
+  pm.style.color = msgCol[sim.fi];
+
+  const statuses = ['CONTRACTED', 'INVERTED', 'RESOLVED ∎'];
+  const stCols   = ['#c45a5a',    '#5a7ec4',   '#5ac4aa'];
+  const hs = document.getElementById('h-status');
+  hs.textContent = statuses[sim.fi];
+  hs.style.color = stCols[sim.fi];
+}
+
+// ─── Main Loop ─────────────────────────────────────────────────────────────
+function loop(ts) {
+  if (!sim.lastTs) sim.lastTs = ts;
+  const rawDt = Math.min((ts - sim.lastTs) / 1000, 0.05);
+  sim.lastTs  = ts;
+  const dt    = sim.paused ? 0 : rawDt * sim.speed;
+
+  sim.t     += dt;
+  sim.timer += sim.trans ? 0 : dt;
+
+  // Scope data push
+  scopeTimer += dt;
+  if (scopeTimer > 0.045) { pushScope(); scopeTimer = 0; }
+
+  // Trigger frame transition
+  if (!sim.trans && !sim.paused && sim.timer >= sim.dur) {
+    sim.trans  = true;
+    sim.tt     = 0;
+    sim.timer  = 0;
+  }
+
+  // Advance transition
+  if (sim.trans) {
+    sim.tt   += dt * 2.4;
+    sim.flash = Math.sin(Math.min(sim.tt, 1) * Math.PI);
+    if (sim.tt >= 1) {
+      sim.trans  = false;
+      sim.tt     = 0;
+      sim.flash  = 0;
+      sim.fi     = (sim.fi + 1) % 3;
+      sim.tick++;
+      sim.parts  = [];
+      updateHUD();
+    }
+  } else {
+    sim.flash *= 0.87;
+  }
+
+  // ── Draw ────────────────────────────────────────────────────
+  ctx.fillStyle = 'rgba(10,10,8,0.83)';
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  drawStars();
+  drawGrid();
+  updateParticles(dt);
+  drawCenter();
+  KEYS.forEach(k => drawDot(k));
+  drawScope();
+
+  requestAnimationFrame(loop);
+}
+
+// ─── Controls ──────────────────────────────────────────────────────────────
+document.getElementById('btn-pause').addEventListener('click', function() {
+  sim.paused = !sim.paused;
+  this.textContent = sim.paused ? 'PLAY' : 'PAUSE';
+  this.classList.toggle('on', sim.paused);
+});
+
+document.getElementById('btn-step').addEventListener('click', function() {
+  if (sim.trans) return;
+  // Force transition to start, temporarily unpause for animation
+  sim.trans = true;
+  sim.tt    = 0;
+  sim.timer = 0;
+  const wasPaused = sim.paused;
+  sim.paused = false;
+  if (wasPaused) {
+    const watcher = setInterval(() => {
+      if (!sim.trans) { sim.paused = true; clearInterval(watcher); }
+    }, 40);
+  }
+});
+
+document.getElementById('btn-slow').addEventListener('click', function() {
+  sim.speed = 0.22;
+  this.classList.add('on');
+  document.getElementById('btn-fast').classList.remove('on');
+});
+
+document.getElementById('btn-fast').addEventListener('click', function() {
+  sim.speed = 4.0;
+  this.classList.add('on');
+  document.getElementById('btn-slow').classList.remove('on');
+});
+
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space')      { e.preventDefault(); document.getElementById('btn-pause').click(); }
+  if (e.code === 'ArrowRight') document.getElementById('btn-step').click();
+});
+
+// ─── Init ───────────────────────────────────────────────────────────────────
+resize();
+updateHUD();
+requestAnimationFrame(loop);
+</script>
+</body>
+</html>
