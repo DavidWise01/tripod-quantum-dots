@@ -1,0 +1,9 @@
+ROOT0-DLW-CHAIN-v1
+index : 1290
+slug  : tripod-quantum-dots
+seal  : 22aa93f4479065bccb07d0a631de2d81c52c70d3d08b514cbae193432431a34d
+prev  : 5468f1b696363c67a6e139bee187aba17ca52f87320b08d07136d4f56bb78ba9
+link  : 490135a17458d499a26bd8da7b78a46deaa51dbea2ceed3b96ee309657df81b8
+head  : eff4338d5feb1c1a3d8b51b42f6042e41cc2c47f908ed6e326673243b18a5461
+
+— the tether: link = sha256(index|slug|seal|prev). the chain head commits to the whole corpus.
